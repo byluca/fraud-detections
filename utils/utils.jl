@@ -1343,3 +1343,29 @@ function modelCrossValidation(
     return (acc_stats, err_stats, sens_stats, spec_stats, ppv_stats, npv_stats, f1_stats, globalConfusionMatrix)
 end
 
+# ============================================================================
+#     CROSS-VALIDATION INDEX GENERATION (Stratified)
+# ============================================================================
+
+function crossvalidation(targets::AbstractArray{Int,1}, k::Int64)
+    """
+    Create stratified k-fold cross-validation indices
+    Returns: array of fold assignments (1 to k) for each sample
+    """
+    indices = zeros(Int, length(targets))
+    
+    # For each class, assign fold indices
+    for class_label in unique(targets)
+        class_mask = targets .== class_label
+        n_class = sum(class_mask)
+        
+        # Create k folds for this class
+        class_indices = repeat(1:k, Int(ceil(n_class/k)))[1:n_class]
+        shuffle!(class_indices)
+        
+        # Assign to main indices array
+        indices[class_mask] .= class_indices
+    end
+    
+    return indices
+end

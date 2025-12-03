@@ -48,7 +48,7 @@ println("✅ Course utilities loaded (includes modelCrossValidation, confusionMa
 
 # Load custom preprocessing
 include("utils/preprocessing.jl")
-using .PreprocessingUtils
+using .PreprocessingUtils: create_risk_classes, preprocess_multiclass
 println("✅ Custom preprocessing utilities loaded!")
 
 # ============================================================================
